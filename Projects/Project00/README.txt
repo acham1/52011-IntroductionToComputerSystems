@@ -34,12 +34,12 @@ II.     RUNNING
 
         For example, when running the program from inside the src/ directory:
 
-            strip ../examples/sample.in
+            ./strip ../examples/sample.in
         (This command will write a file ../examples/sample.out with only 
         whitespace removed)
 
-            strip no-comments ../examples/sample.in
-            strip ../examples/sample.in no-comments
+            ./strip no-comments ../examples/sample.in
+            ./strip ../examples/sample.in no-comments
         (Either of these commands will write a file ../examples/sample.out with
         both comments and whitespace removed)
 
