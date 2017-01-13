@@ -1,0 +1,29 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/01/Or8Way.hdl
+
+/**
+ * 8-way Or: 
+ * out = (in[0] or in[1] or ... or in[7])
+ */
+
+CHIP Or8Way {
+    IN in[8];
+    OUT out;
+
+    PARTS:
+    // OrXtoY is true iff at least one pin in in[X..Y] is true
+    // First Or-evaluate individual pairs
+    Or(a=in[0], b=in[1], out=Or0to1);
+    Or(a=in[2], b=in[3], out=Or2to3);
+    Or(a=in[4], b=in[5], out=Or4to5);
+    Or(a=in[6], b=in[7], out=Or6to7);
+
+    // Then Or-evaluate pairs of pairs
+    Or(a=Or0to1, b=Or2to3, out=Or0to3);
+    Or(a=Or4to5, b=Or6to7, out=Or4to7);
+
+    // Then Or-evaluate pairs of pairs of pairs
+    Or(a=Or0to3, b=Or4to7, out=out);
+}
