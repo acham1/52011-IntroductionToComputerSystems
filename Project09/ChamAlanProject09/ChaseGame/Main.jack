@@ -1,0 +1,83 @@
+/**
+ *  Alan Cham
+ *  52011 - Introduction to Computer Systems
+ *  Project 09
+ *  February 16, 2016
+ *  Main.jack
+ */
+
+class Main {
+    function void main() {
+        var Block chaser, leader;       // moving blocks for drawing and erasing
+        var Timer timer;                // count down to end of game
+        var int key, limit;             // stores key press, and time limit
+
+        do Main.printTitle();                       // print title
+        let leader = Block.new(40, true, false);    // draw colorer block
+        let chaser = Block.new(50, false, true);    // draw eraser block
+        let key = Main.waitForReady();              // wait until user presses an arrow
+
+        let limit = 4000;               // set time limit to 4000
+        do Screen.clearScreen();        // empty the screen
+        let timer = Timer.new(limit);   // set the timer
+
+        while (~timer.timedOut()) {                             // run until timeout
+            do leader.moveRandom(timer.getRemaining(), key);    // move colorer 'random'
+            let key = Keyboard.keyPressed();                    // get key press
+            do chaser.moveByKey(Keyboard.keyPressed());         // drive eraser
+            do timer.decrement();                               // countdown timer
+        }
+
+        do Main.printScore();   // print results
+        do chaser.dispose();    // deallocate chaser
+        do leader.dispose();    // deallocate leader
+        do timer.dispose();     // deallocate timer
+        return;                 // end of game
+    }
+
+    // print title screen
+    function void printTitle() {
+        do Output.printString("Chase Game");
+        do Output.println();
+        do Output.printString("Use arrow keys to erase the black areas before time runs out!");
+        do Output.println();
+        do Output.printString("Press an arrow key to begin:"); 
+        return;
+    }
+
+    // wait until user is ready to start and then return pressed key
+    function int waitForReady() {
+        var int key;
+
+        let key = Keyboard.keyPressed();
+        while (~((key > 129) & (key < 134))) {
+            let key = Keyboard.keyPressed();
+        }
+        return key;
+    }
+
+    // print the number of nonzero screen registers
+    function void printScore() {
+        var int count;
+        var ScreenCounter sc;
+
+
+        let sc = ScreenCounter.new();
+        let count = sc.getCount();
+        do Screen.setColor(true);
+        do Screen.drawRectangle(0,0,240,40);
+        do Screen.setColor(false);
+        do Screen.drawRectangle(2,2,238,38);
+        do Output.moveCursor(0,0);
+        do Output.printString("GAME OVER");
+        do Output.println();
+        do Output.printString("Lower score is better!");
+        do Output.println();
+        do Output.printString("Score: ");
+        do Output.printInt(count);
+        do Output.printString(" colored registers!");
+
+        do sc.dispose();
+        return;
+    }
+}

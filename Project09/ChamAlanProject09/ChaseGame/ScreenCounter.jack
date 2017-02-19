@@ -1,0 +1,43 @@
+/**
+ *  Alan Cham
+ *  52011 - Introduction to Computer Systems
+ *  Project 09
+ *  February 16, 2016
+ *  ScreenCounter.jack
+ */
+
+ class ScreenCounter {
+    static int start, end;      // records when screen addresses start/end
+    field int numBlackPixels;   // number of black pixels on screen
+
+    // create a new object for counting dirty registers
+    // initialize the start/end values
+    constructor ScreenCounter new() {
+        let start = 16384;
+        let end = 24575;
+        return this;
+    }
+
+    // check each screen register to see if it is nonzero
+    // return number of nonzero screen registers
+    method int getCount() {
+        var int pos;
+        var int count;
+
+        let count = 0;
+        let pos = start;
+        while (~(pos > end)) {
+            if (~(Memory.peek(pos) = 0)) {
+                let count = count + 1;
+            }
+            let pos = pos + 1;
+        }
+        return count;
+    }
+ 
+     // deallocate memory for this object
+    method void dispose() {
+        do Memory.deAlloc(this);
+        return;    
+    }
+}

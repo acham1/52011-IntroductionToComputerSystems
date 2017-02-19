@@ -1,0 +1,38 @@
+function Timer.new 0
+push constant 1
+call Memory.alloc 1
+pop pointer 0
+push argument 0
+pop this 0
+push pointer 0
+return
+function Timer.timedOut 0
+push argument 0
+pop pointer 0
+push this 0
+push constant 0
+gt
+not
+return
+function Timer.getRemaining 0
+push argument 0
+pop pointer 0
+push this 0
+return
+function Timer.decrement 0
+push argument 0
+pop pointer 0
+push this 0
+push constant 1
+sub
+pop this 0
+push constant 0
+return
+function Timer.dispose 0
+push argument 0
+pop pointer 0
+push pointer 0
+call Memory.deAlloc 1
+pop temp 0
+push constant 0
+return

@@ -1,0 +1,40 @@
+/**
+ *  Alan Cham
+ *  52011 - Introduction to Computer Systems
+ *  Project 09
+ *  February 16, 2016
+ *  Timer.jack
+ */
+
+ class Timer {
+    field int remaining;    // time remaining
+
+    // create a timer, set to a given limit
+    constructor Timer new(int limit) {
+        let remaining = limit;
+        return this;
+    }
+
+    // check if timer has run out
+    method boolean timedOut() {
+        return ~(remaining > 0);
+    }
+
+    // get current remaining time
+    method int getRemaining() {
+        return remaining;
+    }
+
+    // decrease remaining time by 1
+    method void decrement() {
+        let remaining = remaining - 1;
+        return;
+    }
+
+    // deallocate memory for this object
+    method void dispose() {
+        do Memory.deAlloc(this);
+        return;    
+    }
+
+ }

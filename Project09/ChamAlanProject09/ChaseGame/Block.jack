@@ -1,0 +1,193 @@
+/**
+ *  Alan Cham
+ *  52011 - Introduction to Computer Systems
+ *  Project 09
+ *  February 16, 2016
+ *  Block.jack
+ */
+
+ class Block {
+    field int prevRand;         // previous "random" number
+    field int x, y;             // x, y coordinates of square top left
+    field int size;             // length of square's edge
+    field boolean color;        // color of square
+    field boolean outline;      // true if square is outlined
+    field int thickness;        // pixel thickness of square's outline
+
+    // create and draw a new square
+    constructor Block new(int newSize, boolean blockColor, boolean hasOutline) {
+        let thickness = 2;
+        let x = 256 - (newSize / 2);
+        let y = 128 - (newSize / 2);
+        let size = newSize;
+        let color = blockColor;
+        let outline = hasOutline;
+        if (outline) {
+            do Screen.setColor(~color);
+            do Screen.drawRectangle(x, y, x+size-1, y+size-1);
+            do Screen.setColor(color);
+            do Screen.drawRectangle(x+thickness, y+thickness, x+size-1-thickness, y+size-1-thickness);
+        }
+        if (~outline) {
+            do Screen.setColor(color);
+            do Screen.drawRectangle(x, y, x+size-1, y+size-1);        
+        }
+        return this;
+    }
+
+    // move the square "randomly" based on the two seeds
+    method void moveRandom(int seed1, int seed2) {
+        var int rand;
+
+        let rand = seed1 + seed2 + x + y;
+        let rand = rand + prevRand;
+        let rand = rand & 3;
+        let prevRand = rand;
+        do moveByCode(rand);
+        return;
+    }
+
+    // move the square in a direction determined by the given code
+    // try moving in a different direction if preferred direction fails
+    method void moveByCode(int code) {
+        if (code = 0) {
+            if (~moveUp()) {
+                let code = 1;
+            }
+        }
+        if (code = 1) {
+            if (~moveLeft()) {
+                let code = 2;
+            }
+        }
+        if (code = 2) {
+            if (~moveDown()) {
+                let code = 3;
+            }
+        }
+        if (code = 3) {
+            if (~moveRight()) {
+                do moveByCode(0);
+            }
+        }
+        return;
+    }
+
+    // move square in the direction commanded by the user by arrow keys
+    method void moveByKey(int key) {
+        if (key = 130) {
+            do moveLeft();
+        }
+        if (key = 131) {
+            do moveUp();
+        }
+        if (key = 132) {
+            do moveRight();
+        }
+        if (key = 133) {
+            do moveDown();
+        }
+        if ((key < 130) | (key > 133)) {
+            if (outline) {
+                do Screen.setColor(color);
+                do Screen.drawRectangle(x+thickness, y+thickness, x+size-1-thickness, y+size-1-thickness);
+            }
+            if (~outline) {
+                do Screen.setColor(color);
+                do Screen.drawRectangle(x, y, x+size-1, y+size-1);        
+            }
+        }
+        return;
+    }
+
+    // move the square one pixel up
+    method boolean moveUp() {
+        if (y > 0) {
+            do Screen.setColor(color);
+            do Screen.drawRectangle(x, y, x+size-1, y+size-1);        
+            let y = y-1;
+            if (outline) {
+                do Screen.setColor(~color);
+                do Screen.drawRectangle(x, y, x+size-1, y+size-1);
+                do Screen.setColor(color);
+                do Screen.drawRectangle(x+thickness, y+thickness, x+size-1-thickness, y+size-1-thickness);
+            }
+            if (~outline) {
+                do Screen.setColor(color);
+                do Screen.drawRectangle(x, y, x+size-1, y+size-1);        
+            }
+            return true;
+        }
+        return false;
+    }
+
+    // move the square one pixel down
+    method boolean moveDown() {
+        if (y+size-1 < 255) {
+            do Screen.setColor(color);
+            do Screen.drawRectangle(x, y, x+size-1, y+size-1);        
+            let y = y+1;
+            if (outline) {
+                do Screen.setColor(~color);
+                do Screen.drawRectangle(x, y, x+size-1, y+size-1);
+                do Screen.setColor(color);
+                do Screen.drawRectangle(x+thickness, y+thickness, x+size-1-thickness, y+size-1-thickness);
+            }
+            if (~outline) {
+                do Screen.setColor(color);
+                do Screen.drawRectangle(x, y, x+size-1, y+size-1);        
+            }
+            return true;
+        }
+        return false;
+    }
+
+    // move the square one pixel left
+    method boolean moveLeft() {
+        if (x > 0) {
+            do Screen.setColor(color);
+            do Screen.drawRectangle(x, y, x+size-1, y+size-1);        
+            let x = x-1;
+            if (outline) {
+                do Screen.setColor(~color);
+                do Screen.drawRectangle(x, y, x+size-1, y+size-1);
+                do Screen.setColor(color);
+                do Screen.drawRectangle(x+thickness, y+thickness, x+size-1-thickness, y+size-1-thickness);
+            }
+            if (~outline) {
+                do Screen.setColor(color);
+                do Screen.drawRectangle(x, y, x+size-1, y+size-1);        
+            }
+            return true;
+        }
+        return false;
+    }
+
+    // move the square one pixel right
+    method boolean moveRight() {
+        if (x+size-1 < 511) {
+            do Screen.setColor(color);
+            do Screen.drawRectangle(x, y, x+size-1, y+size-1);        
+            let x = x+1;
+            if (outline) {
+                do Screen.setColor(~color);
+                do Screen.drawRectangle(x, y, x+size-1, y+size-1);
+                do Screen.setColor(color);
+                do Screen.drawRectangle(x+thickness, y+thickness, x+size-1-thickness, y+size-1-thickness);
+            }
+            if (~outline) {
+                do Screen.setColor(color);
+                do Screen.drawRectangle(x, y, x+size-1, y+size-1);        
+            }
+            return true;
+        }
+        return false;
+    }
+
+    // deallocate memory for this object
+    method void dispose() {
+        do Memory.deAlloc(this);
+        return;    
+    }
+
+}
