@@ -124,14 +124,6 @@ public class ExpressionNode extends Node {
             this.children.add(new TokenNode(iter, this.childIndent));
             return;
         }
-        // subroutineCall
-        if (token2.tokenType == TokenType.SYMBOL
-                && (token2.symbolType == SymbolType.OPEN_PAREN
-                || token2.symbolType == SymbolType.PERIOD)) {
-            // subroutineCall
-            this.children.add(new ExpressionNode(ExpressionType.SUBROUTINE_CALL, iter, this.childIndent));
-            return;
-        }
         // '(' expression ')'
         if (token.tokenType == TokenType.SYMBOL && token.symbolType == SymbolType.OPEN_PAREN) {
             // '('
@@ -148,6 +140,15 @@ public class ExpressionNode extends Node {
             this.children.add(new ExpressionNode(ExpressionType.UNARY_OP, iter, this.childIndent));
             // term
             this.children.add(new ExpressionNode(ExpressionType.TERM, iter, this.childIndent));
+            return;
+        }
+        // subroutineCall
+        if (token.tokenType == TokenType.IDENTIFIER
+                && token2.tokenType == TokenType.SYMBOL
+                && (token2.symbolType == SymbolType.OPEN_PAREN
+                || token2.symbolType == SymbolType.PERIOD)) {
+            // subroutineCall
+            this.children.add(new ExpressionNode(ExpressionType.SUBROUTINE_CALL, iter, this.childIndent));
             return;
         }
         // varName | varName '[' expression ']'

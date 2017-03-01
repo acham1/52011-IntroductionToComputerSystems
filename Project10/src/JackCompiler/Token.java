@@ -193,14 +193,14 @@ class Token {
                 String text = str.substring(1, index - 1);
                 Token token = new Token(null, null, TokenType.STRING, text);
                 list.add(token);
-            } else if (str.matches("\\d+(\\s|.)*")) {
+            } else if ((new Scanner(str)).nextLine().matches("\\d+(\\s|.)*")) {
                 // number case
                 Scanner scan = new Scanner(str).useDelimiter("[^\\d]");
                 String text = scan.next();
                 Token token = new Token(null, null, TokenType.INTEGER, text);
                 list.add(token);
                 index = text.length();
-            } else if (str.matches("[\\w&&[^\\d]](\\w)*(\\s|.)*")) {
+            } else if ((new Scanner(str)).nextLine().matches("[\\w&&[^\\d]](\\w)*(\\s|.)*")) {
                 // word case
                 Scanner scan = new Scanner(str).useDelimiter("[^\\w]");
                 String text = scan.next();
@@ -258,8 +258,12 @@ class Token {
             pw.println("<tokens>");
             for (Token t : list) {
                 pw.print("<" + t.tokenType.text + "> ");
-                if (t.text.equals(">") || t.text.equals("<")) {
-                    pw.print(t.text.equals(">") ? "&gt;" : "&lt;");
+                if (t.text.equals(">")) {
+                    pw.print("&gt;");
+                } else if (t.text.equals("<")) {
+                    pw.print("&lt;");
+                } else if (t.text.equals("&")) {
+                    pw.print("&amp;");
                 } else {
                     pw.print(t.text);
                 }

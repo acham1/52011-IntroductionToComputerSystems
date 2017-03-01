@@ -32,8 +32,12 @@ public class TokenNode extends Node {
     public void print(PrintWriter pw) {
         this.indent(pw);
         pw.print("<" + this.token.tokenType.text + "> ");
-        if (this.token.text.equals(">") || this.token.text.equals("<")) {
-            pw.print(this.token.text.equals(">") ? "&gt;" : "&lt;");
+        if (this.token.text.equals(">")) {
+            pw.print("&gt;");
+        } else if (this.token.text.equals("<")) {
+            pw.print("&lt;");
+        } else if (this.token.text.equals("&")) {
+            pw.print("&amp;");
         } else {
             pw.print(this.token.text);
         }
