@@ -12,7 +12,7 @@ I.  Compilation
 II. Running
     Navigate to the /src directory, then run with the following command:
 
-    javac JackCompiler.Compiler1 <INPUT_NAME>
+    java JackCompiler.Compiler1 <INPUT_NAME>
 
     <INPUT_NAME> can be a path to a .jack file, or it can be a path to a directory
     containing .jack file(s). The output .xml and T.xml files will be placed in the
